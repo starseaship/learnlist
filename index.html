@@ -421,6 +421,10 @@ const GITHUB_OWNER = 'starseaship';
 const GITHUB_REPO  = 'learnlist';
 const GITHUB_BRANCH = 'main';
 const MATERIALS_ROOT = 'materials';
+let allMaterials = [];
+let activeSubject = 'all';
+let activeType = 'all';
+let searchQuery = '';
 
 async function loadMaterials() {
   try {
