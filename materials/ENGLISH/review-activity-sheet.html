@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review · English Paragraph & Essay Structure</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0ebe2;
+    --card: #faf8f4;
+    --ink: #1c1712;
+    --muted: #8a8078;
+    --accent: #c85c2a;
+    --accent2: #2a6c8a;
+    --accent3: #3a7a4a;
+    --line: #ddd5c8;
+    --tag-bg: #f5ede4;
+    --ans-bg: #f7f4ef;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', 'Noto Serif SC', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 36px 16px 60px;
+  }
+
+  /* Page header */
+  .page-header {
+    max-width: 700px;
+    margin: 0 auto 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .page-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .page-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .page-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .page-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-top: 2px;
+  }
+  .page-divider {
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    margin-top: 12px;
+    border-radius: 2px;
+  }
+
+  /* Cards */
+  .cards {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.4s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* stagger */
+  .card:nth-child(1)  { animation-delay: 0.05s; }
+  .card:nth-child(2)  { animation-delay: 0.10s; }
+  .card:nth-child(3)  { animation-delay: 0.15s; }
+  .card:nth-child(4)  { animation-delay: 0.20s; }
+  .card:nth-child(5)  { animation-delay: 0.25s; }
+  .card:nth-child(6)  { animation-delay: 0.30s; }
+  .card:nth-child(7)  { animation-delay: 0.35s; }
+  .card:nth-child(8)  { animation-delay: 0.40s; }
+  .card:nth-child(9)  { animation-delay: 0.45s; }
+  .card:nth-child(10) { animation-delay: 0.50s; }
+
+  .card-q {
+    padding: 16px 20px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .q-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--ink);
+    color: #faf8f4;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: 'DM Serif Display', serif;
+  }
+
+  .q-body {}
+  .q-en {
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .q-zh {
+    font-size: 11.5px;
+    color: var(--muted);
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 300;
+    margin-top: 3px;
+  }
+
+  .card-a {
+    background: var(--ans-bg);
+    padding: 14px 20px 14px 62px;
+  }
+
+  .a-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .a-en {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .a-en mark {
+    background: #fde8d8;
+    color: var(--accent);
+    border-radius: 3px;
+    padding: 0 3px;
+    font-style: normal;
+  }
+  .a-en em {
+    font-style: italic;
+    color: var(--accent2);
+  }
+
+  .a-zh {
+    font-size: 11.5px;
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--line);
+    line-height: 1.7;
+  }
+  .a-zh strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* topic tag on card */
+  .topic-tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .tag-para { background: #e8f0ff; color: #2a4a8a; }
+  .tag-intro { background: #e3f0e8; color: var(--accent3); }
+  .tag-concl { background: #fde8d8; color: var(--accent); }
+
+  /* pills list */
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .pill {
+    background: #f0ebe2;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 13px;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* section divider */
+  .section-sep {
+    max-width: 700px;
+    margin: 8px auto 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sep-label {
+    font-size: 10.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .sep-line {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  @media (max-width: 480px) {
+    .card-a { padding-left: 20px; }
+    .page-title { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-label">Review Activity Sheet</div>
+  <div class="page-title">English Paragraph &amp;<br><em>Essay Structure</em></div>
+  <div class="page-sub">Find a person who… · 十题总复习答案整理</div>
+  <div class="page-divider"></div>
+</div>
+
+<!-- Group 1: Paragraph Structure -->
+<div class="section-sep">
+  <div class="sep-label">Paragraph Structure 段落结构</div>
+  <div class="sep-line"></div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-badge">1</div>
+      <div class="q-body">
+        <div class="topic-tag tag-para">Topic Sentence</div>
+        <div class="q-en">Can explain what a topic sentence does.</div>
+        <div class="q-zh">能解释主题句的作用</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">It <mark>expresses the main idea of a paragraph</mark> and often tells the reader how many supporting points will follow.</div>
+      <div class="a-zh">表达段落的<strong>主旨</strong>，并通常告诉读者接下来会有几个支撑点。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-badge">2</div>
+      <div class="q-body">
+        <div class="topic-tag tag-para">Topic Sentence</div>
+        <div class="q-en">Can explain the location of a topic sentence.</div>
+        <div class="q-zh">能解释主题句的位置</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">It is usually located at the <mark>first sentence</mark> of a paragraph — also called the <em>introductory sentence or section</em>.</div>
+      <div class="a-zh">通常是段落的<strong>第一句话</strong>，也叫做引入句（introductory sentence）。</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Group 2: Introductory Paragraph -->
+<div class="section-sep" style="margin-top:20px;">
+  <div class="sep-label">Introductory Paragraph 引言段落</div>
+  <div class="sep-line"></div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-badge">3</div>
+      <div class="q-body">
+        <div class="topic-tag tag-intro">Thesis Statement</div>
+        <div class="q-en">Can tell what a thesis statement does.</div>
+        <div class="q-zh">能说明论点句的作用</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">It <mark>expresses the main idea of an entire essay</mark> and states the writer's position and main points on the topic.</div>
+      <div class="a-zh">表达<strong>整篇文章的主旨</strong>，并说明作者的立场与主要观点。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-badge">4</div>
+      <div class="q-body">
+        <div class="topic-tag tag-intro">Thesis Statement</div>
+        <div class="q-en">Can explain the location of a thesis statement.</div>
+        <div class="q-zh">能解释论点句的位置</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">It is usually the <mark>last sentence of the introductory paragraph</mark>.</div>
+      <div class="a-zh">通常是<strong>引言段落的最后一句话</strong>。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-badge">5</div>
+      <div class="q-body">
+        <div class="topic-tag tag-intro">Hook</div>
+        <div class="q-en">Can explain the role of the hook.</div>
+        <div class="q-zh">能解释钩子句的作用</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">An <mark>opening sentence to create interest in the reader</mark> — it makes the reader want to continue reading.</div>
+      <div class="a-zh">一句<strong>吸引读者兴趣的开篇句</strong>，让读者想继续阅读下去。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-badge">6</div>
+      <div class="q-body">
+        <div class="topic-tag tag-intro">Hook</div>
+        <div class="q-en">Can explain the location of the hook.</div>
+        <div class="q-zh">能解释钩子句的位置</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">The <mark>first sentence (or first part) of the introductory paragraph</mark>.</div>
+      <div class="a-zh"><strong>引言段落的第一句（或开头部分）</strong>。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-badge">7</div>
+      <div class="q-body">
+        <div class="topic-tag tag-intro">Hook</div>
+        <div class="q-en">Can tell three techniques to use in the hook.</div>
+        <div class="q-zh">能说出钩子句的三种写法</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">
+        <div class="pill-row">
+          <span class="pill">A surprising fact</span>
+          <span class="pill">An interesting question</span>
+          <span class="pill">An imaginary situation</span>
+        </div>
+      </div>
+      <div class="a-zh"><strong>令人惊讶的事实</strong>、<strong>有趣的问题</strong>、<strong>假想情境</strong></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Group 3: Transitions -->
+<div class="section-sep" style="margin-top:20px;">
+  <div class="sep-label">Transitions 过渡词</div>
+  <div class="sep-line"></div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-badge">8</div>
+      <div class="q-body">
+        <div class="topic-tag tag-para">Transition Words</div>
+        <div class="q-en">Can explain what transitions do.</div>
+        <div class="q-zh">能解释过渡词的作用</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">They <mark>connect ideas</mark> and help the reader see the logical relationships between them, allowing the paragraph to be organized in a clear, logical way.</div>
+      <div class="a-zh"><strong>连接观点</strong>，帮助读者看清各想法之间的逻辑关系，使段落结构清晰有序。</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Group 4: Concluding Paragraph -->
+<div class="section-sep" style="margin-top:20px;">
+  <div class="sep-label">Concluding Paragraph 结论段落</div>
+  <div class="sep-line"></div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-badge">9</div>
+      <div class="q-body">
+        <div class="topic-tag tag-concl">Summary Statement</div>
+        <div class="q-en">Can explain what a summary statement does.</div>
+        <div class="q-zh">能解释总结陈述句的作用</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">It <mark>paraphrases the thesis statement</mark> — the author restates the main idea of the essay in different words.</div>
+      <div class="a-zh"><strong>改写论点句</strong>——作者用不同的词重新表达文章主旨（不能原文照抄）。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-badge">10</div>
+      <div class="q-body">
+        <div class="topic-tag tag-concl">Final Thought</div>
+        <div class="q-en">Can tell two techniques to use in the final thought.</div>
+        <div class="q-zh">能说出结语的两种写法</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">
+        <div class="pill-row">
+          <span class="pill">Ask a question</span>
+          <span class="pill">Make a prediction</span>
+        </div>
+      </div>
+      <div class="a-zh"><strong>提出问题</strong>　或　<strong>做出预测</strong></div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

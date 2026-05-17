@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paragraph Structure · 段落结构分析笔记</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #f5efe3;
+    --paper-dark: #ede5d0;
+    --accent: #7c4a1e;
+    --accent-light: #c4864a;
+    --rule: #c8b89a;
+    --highlight: #e8d5a3;
+    --green: #4a7c59;
+    --red: #8b3a3a;
+    --blue: #2c4a7c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #d4c5a9;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 31px,
+        rgba(150,120,80,0.15) 31px,
+        rgba(150,120,80,0.15) 32px
+      );
+    font-family: 'Lora', 'Noto Serif SC', Georgia, serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+  }
+
+  .notebook {
+    max-width: 780px;
+    margin: 0 auto;
+    background: var(--paper);
+    border-radius: 4px 12px 12px 4px;
+    box-shadow:
+      -6px 0 0 0 #8b6f4e,
+      -10px 0 0 0 #6b5235,
+      0 4px 20px rgba(0,0,0,0.25),
+      0 8px 40px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Spine rings */
+  .rings {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    pointer-events: none;
+  }
+  .ring {
+    position: absolute;
+    left: -18px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid #6b5235;
+    background: #d4c5a9;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  .cover {
+    background: linear-gradient(135deg, #3d2b1a 0%, #5c3d22 50%, #7c5230 100%);
+    padding: 50px 50px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .cover-tag {
+    font-family: 'Lora', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 16px;
+  }
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #f5efe3;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .cover-subtitle {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    color: rgba(245,239,227,0.7);
+    margin-bottom: 30px;
+    font-weight: 300;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.5px;
+  }
+  .meta-item span {
+    color: rgba(255,255,255,0.85);
+    font-weight: 600;
+  }
+
+  .content {
+    padding: 40px 50px 50px 60px;
+  }
+
+  /* Section headers */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    margin-top: 40px;
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-num {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    color: var(--paper);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'Playfair Display', serif;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent-light);
+    flex: 1;
+    padding-bottom: 4px;
+  }
+  .section-zh {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px;
+    color: var(--accent-light);
+    font-weight: 300;
+  }
+
+  /* Knowledge cards */
+  .concept-card {
+    background: var(--paper-dark);
+    border-left: 4px solid var(--accent-light);
+    border-radius: 0 8px 8px 0;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .concept-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 23px,
+      rgba(150,120,80,0.1) 23px, rgba(150,120,80,0.1) 24px
+    );
+    border-radius: 0 8px 8px 0;
+    pointer-events: none;
+  }
+  .concept-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .concept-zh {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 12px;
+    color: var(--accent-light);
+    margin-bottom: 8px;
+  }
+  .concept-body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #2a1f10;
+  }
+  .concept-body em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* Structure diagram */
+  .structure-diagram {
+    background: white;
+    border: 2px solid var(--rule);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 20px 0 30px;
+    text-align: center;
+    position: relative;
+  }
+  .diagram-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .para-block {
+    border-radius: 6px;
+    padding: 12px 20px;
+    margin: 8px auto;
+    max-width: 460px;
+    font-size: 13px;
+    line-height: 1.5;
+    position: relative;
+  }
+  .block-ts {
+    background: #fff3cd;
+    border: 2px solid #c4864a;
+    color: #5c3d22;
+    font-weight: 600;
+  }
+  .block-ds {
+    background: #d4edda;
+    border: 2px dashed #4a7c59;
+    color: #2d5c3a;
+  }
+  .block-cs {
+    background: #d1ecf1;
+    border: 2px solid #2c4a7c;
+    color: #1a2d4a;
+    font-weight: 600;
+  }
+  .block-label {
+    position: absolute;
+    right: -110px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: var(--accent);
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: left;
+    width: 100px;
+  }
+  .arrow-down {
+    color: var(--rule);
+    font-size: 18px;
+    margin: 2px 0;
+  }
+
+  /* Transition words grid */
+  .transition-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0 24px;
+  }
+  .trans-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  .trans-type {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .trans-type-zh {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 8px;
+  }
+  .trans-examples {
+    font-size: 12.5px;
+    color: var(--blue);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 36px 0;
+    position: relative;
+  }
+  .divider::after {
+    content: '✦';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--paper);
+    padding: 0 10px;
+    color: var(--rule);
+    font-size: 12px;
+  }
+
+  /* Q&A section */
+  .qa-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .qa-header-zh {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: #888;
+  }
+
+  .qa-item {
+    margin-bottom: 22px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .qa-q {
+    background: #e8dcc8;
+    color: var(--accent);
+    padding: 12px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    background: var(--accent);
+    color: var(--paper);
+    border-radius: 4px;
+    padding: 1px 8px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .q-text {
+    font-size: 13.5px;
+    line-height: 1.5;
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: #3d2508;
+  }
+  .qa-a {
+    padding: 14px 18px 14px 46px;
+    background: #fafaf8;
+    border-left: 3px solid var(--accent-light);
+  }
+  .a-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .a-text {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #1a1208;
+    font-family: 'Lora', serif;
+  }
+  .a-note {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--accent-light);
+    font-style: italic;
+    font-family: 'Lora', serif;
+  }
+  .q-zh {
+    font-size: 11px;
+    font-style: normal;
+    color: #8a6040;
+    margin-top: 3px;
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+  }
+  .a-zh {
+    font-size: 11.5px;
+    color: #7a6040;
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px dashed var(--rule);
+  }
+  .a-zh strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+    background: var(--highlight);
+    padding: 0 3px;
+    border-radius: 2px;
+    font-style: italic;
+  }
+
+  /* Handwritten note style */
+  .handnote {
+    background: #fffbe6;
+    border: 1px solid #e8d5a3;
+    border-radius: 4px;
+    padding: 14px 18px;
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #5c4a1e;
+    margin: 12px 0;
+    position: relative;
+  }
+  .handnote::before {
+    content: '📝';
+    margin-right: 8px;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    margin-right: 4px;
+    font-family: 'Lora', serif;
+  }
+  .tag.green { background: var(--green); }
+  .tag.blue { background: var(--blue); }
+
+  @media (max-width: 600px) {
+    .content { padding: 28px 24px 40px 30px; }
+    .cover { padding: 36px 24px 30px 30px; }
+    .cover-title { font-size: 28px; }
+    .transition-grid { grid-template-columns: 1fr; }
+    .block-label { display: none; }
+    .structure-diagram { padding: 16px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="notebook">
+  <!-- Spine rings decoration -->
+  <div class="rings">
+    <script>
+      for(let i=0;i<12;i++){
+        document.write(`<div class="ring" style="top:${40+i*55}px"></div>`);
+      }
+    </script>
+  </div>
+
+  <!-- Cover -->
+  <div class="cover">
+    <div class="cover-tag">IR1 a1 · 2026 Spring · OJU Writing</div>
+    <div class="cover-title">Paragraph<br>Structure</div>
+    <div class="cover-subtitle">段落结构分析笔记</div>
+    <div class="cover-meta">
+      <div class="meta-item">Source <span>OJU Textbook Excerpt</span></div>
+      <div class="meta-item">Topic <span>Analyzing Paragraph Structure in English</span></div>
+      <div class="meta-item">Q&A <span>10 Questions</span></div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Part I: Knowledge Points -->
+    <div class="section-header">
+      <div class="section-num">I</div>
+      <div>
+        <div class="section-title">Core Knowledge Points</div>
+        <div class="section-zh">核心知识点</div>
+      </div>
+    </div>
+
+    <!-- Structure overview diagram -->
+    <div class="structure-diagram">
+      <div class="diagram-title">Paragraph Structure Overview · 段落结构图</div>
+      <div style="position:relative; display:inline-block;">
+        <div class="para-block block-ts">
+          Topic Sentence 主题句
+          <div class="block-label">① 首句 · 引入主旨</div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="para-block block-ds">
+          Developing Sentences 展开句<br>
+          <small style="opacity:0.7">（含 Transition Words 过渡词）</small>
+          <div class="block-label">② 中间 · 展开支撑</div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="para-block block-cs">
+          Concluding Sentence 结论句
+          <div class="block-label">③ 末句 · 总结收尾</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. Topic Sentence -->
+    <div class="concept-card">
+      <div class="concept-name">① Topic Sentence <span class="tag">主题句</span></div>
+      <div class="concept-zh">也叫 Introductory sentence / section</div>
+      <div class="concept-body">
+        通常是段落的<em>第一句话</em>，介绍段落的主要观点（main idea），并经常告诉读者接下来会有多少个支撑点（how many supporting points will follow）。
+      </div>
+    </div>
+
+    <!-- 2. Developing Sentences -->
+    <div class="concept-card" style="border-color: var(--green);">
+      <div class="concept-name">② Developing Sentences <span class="tag green">展开句</span></div>
+      <div class="concept-zh">也叫 Supporting sentences / section</div>
+      <div class="concept-body">
+        位于主题句之后，<em>更详细地展开</em>作者的主要观点（explain the writer's main points in more detail）。段落中间部分都属于展开句。
+      </div>
+    </div>
+
+    <!-- 3. Transition Words -->
+    <div class="concept-card" style="border-color: var(--blue);">
+      <div class="concept-name">③ Transition Words <span class="tag blue">过渡词</span></div>
+      <div class="concept-zh">帮助读者看出各观点之间的连接关系</div>
+      <div class="concept-body">
+        分三类：帮助读者看出这些想法之间的<em>逻辑联系</em>，使段落组织更清晰。
+      </div>
+      <div class="transition-grid" style="margin-top:14px;">
+        <div class="trans-card">
+          <div class="trans-type">Simple Signals</div>
+          <div class="trans-type-zh">简单信号词（数字）</div>
+          <div class="trans-examples">first, second,<br>third, etc.</div>
+        </div>
+        <div class="trans-card">
+          <div class="trans-type">Logical Connectors</div>
+          <div class="trans-type-zh">逻辑连接词</div>
+          <div class="trans-examples">for example,<br>however,<br>therefore</div>
+        </div>
+        <div class="trans-card">
+          <div class="trans-type">Other Joining Words</div>
+          <div class="trans-type-zh">其他连接词</div>
+          <div class="trans-examples">another,<br>more importantly,<br>furthermore</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Concluding Sentence -->
+    <div class="concept-card" style="border-color: var(--blue); border-left-width: 4px;">
+      <div class="concept-name">④ Concluding Sentence <span class="tag blue">结论句</span></div>
+      <div class="concept-zh">段落最后一句（或两句）</div>
+      <div class="concept-body">
+        作用有两点：<br>
+        <em>1.</em> 告诉读者段落已结束（tells the reader the paragraph is finished）<br>
+        <em>2.</em> 通过<em>改写主题句（paraphrasing the topic sentence）</em>，唤起读者对段落主旨的记忆——注意：不引入新观点！
+      </div>
+    </div>
+
+    <div class="handnote">
+      结论句的写法 = 改写主题句（paraphrase），不引入新内容（Don't introduce new ideas）
+    </div>
+
+    <hr class="divider">
+
+    <!-- Part II: Q&A -->
+    <div class="qa-header">
+      <span>Questions & Answers</span>
+      <span class="qa-header-zh">课堂问答整理</span>
+    </div>
+    <p style="font-size:13px; color:#888; font-style:italic; margin-bottom:24px; font-family:'Lora',serif;">
+      Based on the passage "Analyzing Paragraph Structure in English"
+    </p>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q1</div>
+        <div class="q-text">Where is the topic sentence located?
+          <div class="q-zh">主题句在哪里？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          It is usually the <span class="highlight">first sentence</span> of a paragraph — we often call it the <em>introductory sentence or section</em>.
+        </div>
+        <div class="a-zh">通常是段落的<strong>第一句话</strong>，也叫做引入句（introductory sentence）或引入部分。</div>
+        <div class="a-note">注意：你写的第一句实际上是段落开头原文，正确答案应指出"第一句"的位置。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q2</div>
+        <div class="q-text">What is another name of the topic sentence?
+          <div class="q-zh">主题句的另一个名称是什么？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          The <span class="highlight">introductory sentence</span> (or introductory section).
+        </div>
+        <div class="a-zh"><strong>引入句</strong>（introductory sentence），或引入部分（introductory section）。</div>
+        <div class="a-note">注意：你写的是结论句的功能（"reminds the reader of the main ideas"），请区分两个句子！</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q3</div>
+        <div class="q-text">What does the topic sentence do?
+          <div class="q-zh">主题句的作用是什么？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          It <span class="highlight">introduces the paragraph's main idea</span> and often tells the reader <span class="highlight">how many supporting points will follow</span>.
+        </div>
+        <div class="a-zh">它<strong>介绍段落的主旨</strong>，并通常告诉读者接下来会有<strong>几个支撑点</strong>。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q4</div>
+        <div class="q-text">What are developing sentences?
+          <div class="q-zh">展开句是什么？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          Sentences that <span class="highlight">explain the writer's main points in more detail</span>. They are also called <em>supporting sentences or section</em>.
+        </div>
+        <div class="a-zh">用来<strong>更详细地阐释作者主要观点</strong>的句子，也叫做支撑句（supporting sentences）或支撑部分。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q5</div>
+        <div class="q-text">What do transition words do?
+          <div class="q-zh">过渡词的作用是什么？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          They <span class="highlight">help the reader see the connections between ideas</span> and allow the paragraph to be organized in a logical way.
+        </div>
+        <div class="a-zh">帮助读者<strong>看清各观点之间的逻辑联系</strong>，使段落以合理的方式组织起来。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q6</div>
+        <div class="q-text">What are some examples of transition words (simple signals: number)?
+          <div class="q-zh">过渡词的例子有哪些？（简单信号词：数字类）</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          <span class="highlight">First, second, third, etc.</span>
+        </div>
+        <div class="a-zh"><strong>第一、第二、第三……</strong>等顺序数字词。</div>
+        <div class="a-note">（你的答案中同时列出了三类过渡词，Q6 只需回答数字类。）</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q7</div>
+        <div class="q-text">What are some examples of transition words (logical connector)?
+          <div class="q-zh">过渡词的例子有哪些？（逻辑连接词）</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          <span class="highlight">For example, however, therefore</span>
+        </div>
+        <div class="a-zh"><strong>例如（for example）、然而（however）、因此（therefore）</strong>等。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q8</div>
+        <div class="q-text">What are some examples of transition words (other joining words)?
+          <div class="q-zh">过渡词的例子有哪些？（其他连接词）</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          <span class="highlight">Another, more importantly, furthermore</span>
+        </div>
+        <div class="a-zh"><strong>另外（another）、更重要的是（more importantly）、此外（furthermore）</strong>等。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q9</div>
+        <div class="q-text">Where is the concluding sentence located?
+          <div class="q-zh">结论句在哪里？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          It is the <span class="highlight">last sentence (or two)</span> in a paragraph.
+        </div>
+        <div class="a-zh">段落的<strong>最后一句（或最后两句）</strong>。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q10</div>
+        <div class="q-text">What does the concluding sentence do? Write two.
+          <div class="q-zh">结论句的作用是什么？写出两点。</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          1) It <span class="highlight">tells the reader the paragraph is finished</span>.<br>
+          2) It <span class="highlight">reminds the reader of the main ideas</span> of the paragraph — by <em>paraphrasing the topic sentence</em>, without introducing new ideas.
+        </div>
+        <div class="a-zh">
+          1）<strong>告诉读者段落已结束</strong>。<br>
+          2）通过<strong>改写主题句（paraphrase）</strong>，<strong>唤起读者对段落主旨的记忆</strong>——不引入任何新观点。
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Quick summary note -->
+    <div style="background: var(--paper-dark); border-radius: 10px; padding: 22px 26px; border: 1px solid var(--rule);">
+      <div style="font-family:'Playfair Display',serif; font-size:16px; font-weight:700; color:var(--accent); margin-bottom:14px;">⚡ 注意易错点 · Common Mistakes</div>
+      <div style="font-size:13px; line-height:1.9; font-family:'Lora',serif; color:#2a1f10;">
+        <strong>Q2</strong> — "Another name of topic sentence" 是 <em>introductory sentence</em>，不是结论句的功能。<br>
+        <strong>Q1</strong> — 主题句位置是"第一句"，不是直接引用原文开头。<br>
+        <strong>Concluding sentence</strong> — 必须改写主题句（paraphrase），不能原文照抄，也不能引入新内容。<br>
+        <strong>Developing sentences</strong> — 别名是 "supporting sentences/section"，记住这个同义词。
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ===== NEW LESSON: Writing an Introductory Paragraph ===== -->
+    <div class="section-header">
+      <div class="section-num" style="background:var(--blue);">II</div>
+      <div>
+        <div class="section-title" style="color:var(--blue); border-color:var(--blue);">Writing an Introductory Paragraph</div>
+        <div class="section-zh">写引言段落</div>
+      </div>
+    </div>
+
+    <!-- Key concepts -->
+    <div class="concept-card" style="border-color:var(--blue);">
+      <div class="concept-name" style="color:var(--blue);">Thesis Statement <span class="tag blue">论点陈述句</span></div>
+      <div class="concept-zh">通常是引言段落的最后一句</div>
+      <div class="concept-body">
+        表达整篇文章的主旨（expresses the main idea of an entire essay），并说明作者在该话题上的立场及文章的主要观点。<br>
+        <em>⚠ 注意：</em>引言中应避免说 "I am going to write about…"（除非是个人文章）。
+      </div>
+    </div>
+
+    <div class="concept-card" style="border-color:var(--green);">
+      <div class="concept-name" style="color:var(--green);">Hook <span class="tag green">开篇钩子句</span></div>
+      <div class="concept-zh">引言段落的开篇句，用于吸引读者兴趣</div>
+      <div class="concept-body">
+        Hook 可以是以下三种之一：<br>
+        <em>1.</em> A surprising fact（令人惊讶的事实）<br>
+        <em>2.</em> An interesting question（有趣的问题）<br>
+        <em>3.</em> An imaginary situation（假想情境）
+      </div>
+    </div>
+
+    <!-- Structure mini diagram -->
+    <div class="structure-diagram">
+      <div class="diagram-title">Introductory Paragraph Structure · 引言段落结构</div>
+      <div style="position:relative; display:inline-block;">
+        <div class="para-block" style="background:#e8f4f8; border:2px solid var(--green); color:#1a3a2a; font-weight:600; max-width:460px;">
+          Hook 钩子句
+          <div class="block-label" style="color:var(--green);">吸引读者</div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="para-block block-ds" style="max-width:460px;">
+          General Information 背景信息
+          <div class="block-label">关于话题的铺垫</div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="para-block" style="background:#dce8f8; border:2px solid var(--blue); color:#1a2d4a; font-weight:600; max-width:460px;">
+          Thesis Statement 论点句
+          <div class="block-label" style="color:var(--blue);">最后一句 · 点明主旨</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q&A for Introductory Paragraph -->
+    <div class="qa-header" style="margin-top:8px;">
+      <span style="font-size:18px;">Comprehension Questions</span>
+      <span class="qa-header-zh">理解问答</span>
+    </div>
+    <p style="font-size:13px; color:#888; font-style:italic; margin-bottom:20px; font-family:'Lora',serif;">
+      Writing an Introductory Paragraph · IR(a)
+    </p>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q1</div>
+        <div class="q-text">What does a thesis statement do?
+          <div class="q-zh">论点句的作用是什么？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">It <span class="highlight">expresses the main idea of an entire essay</span>.</div>
+        <div class="a-zh">它<strong>表达整篇文章的主旨</strong>。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q2</div>
+        <div class="q-text">Where is a thesis statement usually located?
+          <div class="q-zh">论点句通常在哪里？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">The <span class="highlight">last sentence in the introductory paragraph</span>.</div>
+        <div class="a-zh">引言段落的<strong>最后一句</strong>。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q3</div>
+        <div class="q-text">What is the role of a hook?
+          <div class="q-zh">钩子句的作用是什么？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">An <span class="highlight">opening sentence to interest the reader</span>.</div>
+        <div class="a-zh">一句<strong>吸引读者兴趣的开篇句</strong>。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q4</div>
+        <div class="q-text">What are three things you can write for the hook?
+          <div class="q-zh">钩子句可以写哪三种内容？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">
+          1. <span class="highlight">A surprising fact</span> &nbsp;
+          2. <span class="highlight">An interesting question</span> &nbsp;
+          3. <span class="highlight">An imaginary situation</span>
+        </div>
+        <div class="a-zh">1. <strong>令人惊讶的事实</strong>　2. <strong>有趣的问题</strong>　3. <strong>假想情境</strong></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q5</div>
+        <div class="q-text">What is a thing you should avoid in the introduction paragraph?
+          <div class="q-zh">引言段落里应该避免什么？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">Avoid saying <span class="highlight">"I am going to write about…"</span> (unless writing a personal essay).</div>
+        <div class="a-zh">避免说<strong>"I am going to write about…"</strong>（除非是个人文章）。</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ===== NEW LESSON: Writing a Concluding Paragraph ===== -->
+    <div class="section-header">
+      <div class="section-num" style="background:var(--red);">III</div>
+      <div>
+        <div class="section-title" style="color:var(--red); border-color:var(--red);">Writing a Concluding Paragraph</div>
+        <div class="section-zh">写结论段落</div>
+      </div>
+    </div>
+
+    <div class="concept-card" style="border-color:var(--red);">
+      <div class="concept-name" style="color:var(--red);">Concluding Paragraph 结论段落</div>
+      <div class="concept-zh">文章的最后一段，包含两个部分</div>
+      <div class="concept-body">
+        <em>1.</em> <strong>Summary Statement（总结陈述句）</strong>：改写论点句（paraphrases the thesis statement），用不同的词重述主旨。<br>
+        <em>2.</em> <strong>Final Thought（结语）</strong>：给读者留下思考，有两种写法——
+        <br>　· Make a prediction（做出预测）
+        <br>　· Ask a question（提出问题）
+      </div>
+    </div>
+
+    <div class="handnote">
+      Summary Statement ≠ 照抄论点句！要用不同的词改写（paraphrase），让读者感受到总结而非重复。
+    </div>
+
+    <div class="qa-header" style="margin-top:24px;">
+      <span style="font-size:18px;">Comprehension Questions</span>
+      <span class="qa-header-zh">理解问答</span>
+    </div>
+    <p style="font-size:13px; color:#888; font-style:italic; margin-bottom:20px; font-family:'Lora',serif;">
+      Writing a Concluding Paragraph
+    </p>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q1</div>
+        <div class="q-text">What does a conclusion paragraph include? Write two.
+          <div class="q-zh">结论段落包含哪两部分？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">1. <span class="highlight">Summary statement</span> &nbsp; 2. <span class="highlight">A final thought</span></div>
+        <div class="a-zh">1. <strong>总结陈述句</strong>　2. <strong>结语（最终想法）</strong></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q2</div>
+        <div class="q-text">What does a summary statement do?
+          <div class="q-zh">总结陈述句的作用是什么？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">It <span class="highlight">paraphrases the thesis statement</span> — the author restates it in different words.</div>
+        <div class="a-zh">它<strong>改写论点句</strong>——作者用不同的词重新表达主旨。</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">
+        <div class="q-num">Q3</div>
+        <div class="q-text">What are two ways to write a final thought?
+          <div class="q-zh">结语有哪两种写法？</div>
+        </div>
+      </div>
+      <div class="qa-a">
+        <div class="a-label">Answer</div>
+        <div class="a-text">1. <span class="highlight">Make a prediction</span> &nbsp; 2. <span class="highlight">Ask a question</span></div>
+        <div class="a-zh">1. <strong>做出预测</strong>　2. <strong>提出问题</strong></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Updated Common Mistakes -->
+    <div style="background: var(--paper-dark); border-radius: 10px; padding: 22px 26px; border: 1px solid var(--rule);">
+      <div style="font-family:'Playfair Display',serif; font-size:16px; font-weight:700; color:var(--accent); margin-bottom:14px;">⚡ 注意易错点 · Common Mistakes</div>
+      <div style="font-size:13px; line-height:1.9; font-family:'Lora',serif; color:#2a1f10;">
+        <strong>Q2 (Lesson I)</strong> — "Another name of topic sentence" 是 <em>introductory sentence</em>，不是结论句的功能。<br>
+        <strong>Q1 (Lesson I)</strong> — 主题句位置是"第一句"，不是直接引用原文开头。<br>
+        <strong>Concluding sentence (Lesson I)</strong> — 必须改写主题句（paraphrase），不能原文照抄，也不能引入新内容。<br>
+        <strong>Developing sentences (Lesson I)</strong> — 别名是 "supporting sentences/section"，记住这个同义词。<br>
+        <strong>Thesis vs Summary (Lesson II/III)</strong> — Thesis statement 在引言最后；Summary statement 在结论段，是对 thesis 的改写，不是照抄。<br>
+        <strong>Hook (Lesson II)</strong> — 三种类型：surprising fact / interesting question / imaginary situation，选择时看哪种最能抓住读者。
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /notebook -->
+
+</body>
+</html>

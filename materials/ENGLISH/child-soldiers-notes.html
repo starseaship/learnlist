@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Child Soldiers · Integrated Reading Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0ece4;
+    --surface: #faf8f4;
+    --surface2: #f4f0e8;
+    --border: #ddd6c8;
+    --ink: #1e1a14;
+    --muted: #8c8278;
+    --accent: #b8521e;
+    --accent-dim: #faeae0;
+    --teal: #2a7a6a;
+    --teal-dim: #e0f2ee;
+    --gold: #9a7428;
+    --gold-dim: #f8f0dc;
+    --red-dim: #fdeaea;
+    --red: #b04040;
+    --mark-bg: rgba(184,82,30,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Outfit', 'Noto Serif SC', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 16px 70px;
+  }
+
+  /* ── Header ── */
+  .header {
+    max-width: 680px;
+    margin: 0 auto 40px;
+    border-left: 3px solid var(--accent);
+    padding-left: 20px;
+  }
+  .header-tag {
+    font-size: 10.5px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+  .header-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .header-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .header-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  /* ── Warning banner ── */
+  .warning {
+    max-width: 680px;
+    margin: 0 auto 32px;
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 12px;
+    color: #804040;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .warning-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Section label ── */
+  .section-sep {
+    max-width: 680px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sep-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .sep-text {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .sep-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* ── Cards ── */
+  .cards {
+    max-width: 680px;
+    margin: 0 auto 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: rise 0.45s ease forwards;
+  }
+  @keyframes rise { to { opacity:1; transform:translateY(0); } }
+  .card:nth-child(1) { animation-delay:.05s }
+  .card:nth-child(2) { animation-delay:.10s }
+  .card:nth-child(3) { animation-delay:.15s }
+  .card:nth-child(4) { animation-delay:.20s }
+  .card:nth-child(5) { animation-delay:.25s }
+  .card:nth-child(6) { animation-delay:.30s }
+  .card:nth-child(7) { animation-delay:.35s }
+  .card:nth-child(8) { animation-delay:.40s }
+
+  .card-q {
+    padding: 14px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+    flex-shrink: 0;
+    font-family: 'Outfit', sans-serif;
+    margin-top: 1px;
+  }
+  .q-en {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .q-zh {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 300;
+    margin-top: 3px;
+  }
+
+  .card-a {
+    padding: 14px 18px 14px 58px;
+    background: var(--surface2);
+  }
+  .a-label {
+    font-size: 9.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 7px;
+  }
+  .a-en {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #2a2420;
+  }
+  .a-en mark {
+    background: var(--mark-bg);
+    color: #e0a070;
+    border-radius: 3px;
+    padding: 0 3px;
+  }
+  .a-en .num-item {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+  .a-en .num-item:last-child { margin-bottom: 0; }
+  .num-circle {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-weight: 600;
+  }
+  .a-zh {
+    font-size: 11px;
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    line-height: 1.7;
+  }
+  .a-zh strong { color: #2a2420; font-weight: 600; }
+
+  /* Country pills */
+  .pill-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .pill {
+    background: var(--teal-dim);
+    border: 1px solid var(--teal);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12.5px;
+    color: #80c0b0;
+  }
+
+  /* Role grid */
+  .role-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .role-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .role-icon { font-size: 14px; flex-shrink: 0; }
+  .role-text { font-size: 12.5px; color: #3a3028; line-height: 1.4; }
+
+  @media (max-width: 420px) {
+    .card-a { padding-left: 18px; }
+    .role-grid { grid-template-columns: 1fr; }
+    .header-title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">Integrated Reading · Supplement Worksheet</div>
+  <div class="header-title">What Do You Know About<br><em>Child Soldiers?</em></div>
+  <div class="header-sub">8 Questions · 知识点整理 + 中文注释</div>
+</div>
+
+<div class="warning">
+  <div class="warning-icon">⚠</div>
+  <div>本笔记涉及儿童兵这一严肃人权议题，内容包含暴力、虐待等敏感信息，仅作学术学习整理之用。</div>
+</div>
+
+<!-- Q1 & Q2 -->
+<div class="section-sep">
+  <div class="sep-dot" style="background:var(--accent)"></div>
+  <div class="sep-text">Definition & Scale 定义与规模</div>
+  <div class="sep-line"></div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-num" style="background:var(--accent-dim); color:var(--accent);">1</div>
+      <div>
+        <div class="q-en">Who are child soldiers?</div>
+        <div class="q-zh">什么是儿童兵？</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">Children <mark>(under 18)</mark> who are used for <mark>any military purpose</mark>.</div>
+      <div class="a-zh">泛指被用于<strong>任何军事目的</strong>的未满18岁儿童，不只限于直接参战。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-num" style="background:var(--accent-dim); color:var(--accent);">2</div>
+      <div>
+        <div class="q-en">How many child soldiers were used in South Sudan?</div>
+        <div class="q-zh">南苏丹有多少儿童兵？</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">At least <mark>19,000 children</mark> are believed to be participating in the conflict in South Sudan.</div>
+      <div class="a-zh">据信有至少 <strong>19,000名儿童</strong> 参与了南苏丹冲突。</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Q3 -->
+<div class="section-sep">
+  <div class="sep-dot" style="background:var(--teal)"></div>
+  <div class="sep-text">Geography 主要地区</div>
+  <div class="sep-line"></div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-num" style="background:var(--teal-dim); color:var(--teal);">3</div>
+      <div>
+        <div class="q-en">Besides South Sudan, what are the main countries where child soldiers are being used?</div>
+        <div class="q-zh">除南苏丹外，还有哪些主要国家使用儿童兵？</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">
+        <div class="pill-wrap">
+          <span class="pill">Afghanistan</span>
+          <span class="pill">Myanmar</span>
+          <span class="pill">Somalia</span>
+          <span class="pill">Sudan</span>
+          <span class="pill">Syria</span>
+          <span class="pill">Yemen</span>
+        </div>
+      </div>
+      <div class="a-zh">阿富汗、缅甸、索马里、苏丹、叙利亚、也门</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Q4 & Q5 -->
+<div class="section-sep" style="margin-top:4px;">
+  <div class="sep-dot" style="background:var(--gold)"></div>
+  <div class="sep-text">Causes 原因与成因</div>
+  <div class="sep-line"></div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-num" style="background:var(--gold-dim); color:var(--gold);">4</div>
+      <div>
+        <div class="q-en">Why are children used in wars?</div>
+        <div class="q-zh">为何儿童被用于战争？</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">Children are <mark>easier to manipulate than adults</mark> — they can be controlled and influenced more readily.</div>
+      <div class="a-zh">儿童比成人<strong>更容易被操控</strong>，思想尚未成熟，更容易被影响和利用。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-num" style="background:var(--gold-dim); color:var(--gold);">5</div>
+      <div>
+        <div class="q-en">How do they become child soldiers?</div>
+        <div class="q-zh">儿童如何成为儿童兵？</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div>Easy to <mark>manipulate</mark> than adults.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div>Some are <mark>recruited by force</mark> (e.g. abduction 绑架).</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div>Others <mark>choose to join</mark> to escape poverty, child abuse, or as a way of survival.</div>
+        </div>
+      </div>
+      <div class="a-zh">① 儿童易被操控　② 部分遭强制征募（如绑架）　③ 部分为逃离贫困、虐待或寻求生存而主动加入</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Q6 -->
+<div class="section-sep" style="margin-top:4px;">
+  <div class="sep-dot" style="background:var(--red)"></div>
+  <div class="sep-text">Harm 危害</div>
+  <div class="sep-line"></div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-num" style="background:var(--red-dim); color:var(--red);">6</div>
+      <div>
+        <div class="q-en">How is becoming a child soldier harmful?</div>
+        <div class="q-zh">成为儿童兵有什么危害？</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">
+        <div class="num-item">
+          <div class="num-circle" style="background:var(--red-dim); border-color:var(--red); color:var(--red);">1</div>
+          <div>High risk of <mark>being killed</mark>.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle" style="background:var(--red-dim); border-color:var(--red); color:var(--red);">2</div>
+          <div>Risk of <mark>being sexually abused</mark> by adults.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle" style="background:var(--red-dim); border-color:var(--red); color:var(--red);">3</div>
+          <div>Being <mark>traumatized afterward</mark> — PTSD (Post-Traumatic Stress Disorder).</div>
+        </div>
+      </div>
+      <div class="a-zh">① 极高的死亡风险　② 遭受成人性虐待的风险　③ 事后留下心理创伤（PTSD：创伤后应激障碍）</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Q7 -->
+<div class="section-sep" style="margin-top:4px;">
+  <div class="sep-dot" style="background:var(--teal)"></div>
+  <div class="sep-text">Solutions 解决方式</div>
+  <div class="sep-line"></div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-num" style="background:var(--teal-dim); color:var(--teal);">7</div>
+      <div>
+        <div class="q-en">What can we do to stop (recruiting) child soldiers?</div>
+        <div class="q-zh">我们能做什么来阻止招募儿童兵？</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">
+        <div class="num-item">
+          <div class="num-circle" style="background:var(--teal-dim); border-color:var(--teal); color:var(--teal);">1</div>
+          <div><mark>Support an organization</mark> that is working for child soldiers by donation.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle" style="background:var(--teal-dim); border-color:var(--teal); color:var(--teal);">2</div>
+          <div><mark>Take part in events</mark> to help raise awareness.</div>
+        </div>
+      </div>
+      <div class="a-zh">① 通过捐款<strong>支持相关组织</strong>　② <strong>参与活动</strong>以提高公众意识</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Q8 -->
+<div class="section-sep" style="margin-top:4px;">
+  <div class="sep-dot" style="background:var(--gold)"></div>
+  <div class="sep-text">Roles 儿童兵的角色</div>
+  <div class="sep-line"></div>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="card-q">
+      <div class="q-num" style="background:var(--gold-dim); color:var(--gold);">8</div>
+      <div>
+        <div class="q-en">What roles do child soldiers play?</div>
+        <div class="q-zh">儿童兵承担哪些角色？</div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Answer</div>
+      <div class="a-en">
+        <div class="role-grid">
+          <div class="role-item">
+            <div class="role-icon">⚔️</div>
+            <div class="role-text"><strong style="color:#1e1a14">Fighters</strong><br>to kill and commit other acts of violence</div>
+          </div>
+          <div class="role-item">
+            <div class="role-icon">🍳</div>
+            <div class="role-text"><strong style="color:#1e1a14">Cooks</strong><br>to prepare food for troops</div>
+          </div>
+          <div class="role-item">
+            <div class="role-icon">📦</div>
+            <div class="role-text"><strong style="color:#1e1a14">Porters</strong><br>to carry weapons and injured soldiers</div>
+          </div>
+          <div class="role-item">
+            <div class="role-icon">📨</div>
+            <div class="role-text"><strong style="color:#1e1a14">Messengers</strong><br>to deliver information</div>
+          </div>
+          <div class="role-item" style="grid-column:1/-1;">
+            <div class="role-icon">⚠️</div>
+            <div class="role-text"><strong style="color:var(--red)">Sexual slaves</strong><br>both girls and boys</div>
+          </div>
+        </div>
+      </div>
+      <div class="a-zh">战斗员（施暴）、厨师、搬运工（运送武器和伤员）、信使、性奴（男女儿童均受害）</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
