@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>阅读2战争的定义</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #647084;
+      --line: #dce2ec;
+      --accent: #2364aa;
+      --accent-soft: #e8f1fb;
+      --cn-bg: #f7f3ea;
+      --shadow: 0 12px 30px rgba(23, 32, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.7;
+    }
+
+    .page {
+      width: min(960px, 100%);
+      margin: 0 auto;
+      padding: 28px 16px 48px;
+    }
+
+    header {
+      padding: 28px 20px 24px;
+      margin-bottom: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .qa-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    article {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .question {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 18px 20px;
+      background: var(--accent-soft);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .number {
+      flex: 0 0 auto;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(18px, 3vw, 23px);
+      line-height: 1.45;
+      letter-spacing: 0;
+    }
+
+    .answer-block {
+      padding: 18px 20px 20px;
+    }
+
+    .label {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .answer {
+      margin: 0 0 14px;
+      font-size: 17px;
+    }
+
+    .translation {
+      margin: 0;
+      padding: 14px 16px;
+      background: var(--cn-bg);
+      border-left: 4px solid #c48a2c;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 14px 10px 32px;
+      }
+
+      header {
+        padding: 22px 16px 20px;
+      }
+
+      .question {
+        padding: 16px;
+      }
+
+      .answer-block {
+        padding: 16px;
+      }
+
+      .number {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+      }
+
+      .answer {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>阅读2战争的定义</h1>
+      <p class="subtitle">Reading 2: Definition of War</p>
+    </header>
+
+    <section class="qa-list" aria-label="Questions and answers about war">
+      <article>
+        <div class="question">
+          <span class="number">1</span>
+          <h2>What are four types of war?</h2>
+        </div>
+        <div class="answer-block">
+          <p class="label">Answer</p>
+          <p class="answer">The four types of war are civil wars, religious wars, wars fought to gain territory, and wars of terror.</p>
+          <p class="translation"><strong>翻译：</strong>四种战争类型分别是：内战、宗教战争、领土争夺战争以及恐怖战争。</p>
+        </div>
+      </article>
+
+      <article>
+        <div class="question">
+          <span class="number">2</span>
+          <h2>What is one effect of civil war?</h2>
+        </div>
+        <div class="answer-block">
+          <p class="label">Answer</p>
+          <p class="answer">One effect is that families may be separated because a son might fight for one side and a father fight for the other.</p>
+          <p class="translation"><strong>翻译：</strong>一个影响是家庭可能会因此分离，因为儿子可能会为其中一方作战，而父亲则在另一方作战。</p>
+        </div>
+      </article>
+
+      <article>
+        <div class="question">
+          <span class="number">3</span>
+          <h2>What is an example of a religious war?</h2>
+        </div>
+        <div class="answer-block">
+          <p class="label">Answer</p>
+          <p class="answer">An example of a religious war is the Crusades, which were fought between Christians and Muslims between 1095 and 1291.</p>
+          <p class="translation"><strong>翻译：</strong>宗教战争的一个例子是十字军东征，这是在1095年至1291年间基督徒与穆斯林之间进行的战争。</p>
+        </div>
+      </article>
+
+      <article>
+        <div class="question">
+          <span class="number">4</span>
+          <h2>What is an example of a war fought over territory?</h2>
+        </div>
+        <div class="answer-block">
+          <p class="label">Answer</p>
+          <p class="answer">An example is when Iraq invaded Kuwait in 1990 to take its oil fields.</p>
+          <p class="translation"><strong>翻译：</strong>一个例子是1990年伊拉克入侵科威特以占领其油田。</p>
+        </div>
+      </article>
+
+      <article>
+        <div class="question">
+          <span class="number">5</span>
+          <h2>Which cities have been involved in the war of terror?</h2>
+        </div>
+        <div class="answer-block">
+          <p class="label">Answer</p>
+          <p class="answer">Cities such as New York, Washington D.C., Madrid, London, Mumbai, and Paris have been involved in the war of terror.</p>
+          <p class="translation"><strong>翻译：</strong>纽约、华盛顿特区、马德里、伦敦、孟买和巴黎等城市都曾卷入恐怖战争。</p>
+        </div>
+      </article>
+
+      <article>
+        <div class="question">
+          <span class="number">6</span>
+          <h2>How is a war of terror different from a “typical” war?</h2>
+        </div>
+        <div class="answer-block">
+          <p class="label">Answer</p>
+          <p class="answer">Typical wars are fought by officially trained soldiers, while a war of terror is carried out by militant groups that use children as bombs. Furthermore, a war of terror aims to create intense fear and uses the media to spread their messages.</p>
+          <p class="translation"><strong>翻译：</strong>常规战争参战的是官方训练的士兵，而恐怖战争则由激进组织发起，会用小孩做炸弹。此外，恐怖战争旨在创造剧烈的恐惧，并且会利用媒体来传播他们的信息。</p>
+        </div>
+      </article>
+
+      <article>
+        <div class="question">
+          <span class="number">7</span>
+          <h2>What is the role of media in war?</h2>
+        </div>
+        <div class="answer-block">
+          <p class="label">Answer</p>
+          <p class="answer">The media can be used to control what information people receive about a war, or it can be used to show the reality of war and influence public opinion.</p>
+          <p class="translation"><strong>翻译：</strong>媒体可以被用来控制人们接收到的战争信息，也可以被用来展示战争的现实并影响公众舆论。</p>
+        </div>
+      </article>
+    </section>
+
+    <footer>English Reading Notes</footer>
+  </main>
+</body>
+</html>
