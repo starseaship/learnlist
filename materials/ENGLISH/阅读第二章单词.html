@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocabulary Practice · Leaders of Social Change & No War is Not Enough</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --bg2: #ede7d9;
+    --bg3: #e4dccf;
+    --card: #faf7f2;
+    --border: #d4c9b5;
+    --accent: #8b7355;
+    --accent2: #a8956e;
+    --text: #4a3f2f;
+    --text2: #7a6a55;
+    --green: #6b8f6b;
+    --green-bg: #eef4ee;
+    --red: #a05a4a;
+    --red-bg: #f7eeec;
+    --gold: #b8963a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', serif;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--bg3);
+    border-bottom: 2px solid var(--border);
+    padding: 28px 24px 20px;
+    text-align: center;
+    position: relative;
+  }
+  header::before {
+    content: '❧';
+    display: block;
+    color: var(--accent2);
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--text);
+  }
+  header p {
+    font-size: 0.82rem;
+    color: var(--text2);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: var(--bg2);
+  }
+  .tab {
+    flex: 1;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text2);
+    border: none;
+    background: none;
+    font-family: 'Lora', serif;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+  }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+    background: var(--bg);
+  }
+  .tab:hover:not(.active) { background: var(--bg3); }
+
+  /* ── Sections ── */
+  .section { display: none; padding: 20px 16px; }
+  .section.active { display: block; }
+
+  /* ── Word List Table ── */
+  .chapter-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0 10px;
+  }
+  .chapter-label span {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent2);
+    white-space: nowrap;
+  }
+  .chapter-label hr {
+    flex: 1;
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(100,80,50,0.07);
+    margin-bottom: 6px;
+  }
+  th {
+    background: var(--bg3);
+    padding: 9px 12px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text2);
+    font-weight: 600;
+    text-align: left;
+    font-family: 'Lora', serif;
+  }
+  td {
+    padding: 10px 12px;
+    font-size: 0.84rem;
+    border-top: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tr:hover td { background: #f0ebe0; }
+  td:first-child { font-weight: 600; color: var(--accent); width: 28%; }
+  td:nth-child(2) { color: var(--text2); font-size: 0.78rem; width: 22%; }
+  td:nth-child(3) { font-style: italic; color: var(--text); font-size: 0.8rem; }
+
+  /* ── Matching Game ── */
+  .game-header {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .progress-info { font-size: 0.82rem; color: var(--text2); }
+  .progress-info strong { color: var(--accent); }
+  .score-info { font-size: 0.82rem; color: var(--text2); }
+  .score-info strong { color: var(--green); }
+
+  .progress-bar-wrap {
+    width: 100%;
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 3px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--gold));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .round-label {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text2);
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .col-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text2);
+    text-align: center;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .word-card, .def-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 12px;
+    cursor: pointer;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    transition: all 0.18s ease;
+    text-align: center;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+  .word-card { font-weight: 600; color: var(--accent); }
+  .def-card { font-style: italic; color: var(--text); font-size: 0.78rem; text-align: left; justify-content: flex-start; }
+
+  .word-card:hover, .def-card:hover {
+    background: var(--bg2);
+    border-color: var(--accent2);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(100,80,50,0.1);
+  }
+  .word-card.selected, .def-card.selected {
+    background: #f0e8d5;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent2);
+  }
+  .word-card.correct, .def-card.correct {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--green);
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+  }
+  .word-card.wrong, .def-card.wrong {
+    background: var(--red-bg);
+    border-color: var(--red);
+    animation: shake 0.3s ease;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .feedback-msg {
+    text-align: center;
+    font-size: 0.82rem;
+    min-height: 22px;
+    color: var(--text2);
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: #faf7f2;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Lora', serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: var(--accent2); }
+  .btn:disabled { background: var(--border); cursor: default; }
+
+  .complete-banner {
+    background: var(--green-bg);
+    border: 1.5px solid var(--green);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .complete-banner h3 { color: var(--green); font-size: 1rem; margin-bottom: 6px; }
+  .complete-banner p { font-size: 0.82rem; color: var(--text2); font-style: italic; }
+
+  .round-complete {
+    background: #fdf6e8;
+    border: 1.5px solid var(--gold);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .round-complete h3 { color: var(--gold); font-size: 0.95rem; margin-bottom: 4px; }
+  .round-complete p { font-size: 0.8rem; color: var(--text2); font-style: italic; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Vocabulary Practice</h1>
+  <p>IR Peace &amp; Values · Leaders of Social Change &amp; No War is Not Enough</p>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('list')">📖 单词表</button>
+  <button class="tab" onclick="switchTab('game')">🎯 配对练习</button>
+</div>
+
+<!-- ── WORD LIST ── -->
+<div id="tab-list" class="section active">
+
+  <div class="chapter-label">
+    <span>Chapter 2.7 · Leaders of Social Change</span><hr>
+  </div>
+  <table>
+    <thead><tr><th>单词</th><th>中文</th><th>English Definition</th></tr></thead>
+    <tbody>
+      <tr><td>oppression</td><td>压制 n.</td><td>a situation in which people are governed in an unfair and cruel way and prevented from having opportunities and freedom</td></tr>
+      <tr><td>indigenous</td><td>土着の adj.</td><td>belonging to a particular place rather than coming to it from somewhere else</td></tr>
+      <tr><td>soldier</td><td>兵士 n.</td><td>a member of an army, especially one who is not an officer</td></tr>
+      <tr><td>oppose</td><td>反対する v.</td><td>to disagree strongly with somebody's plan, policy, etc. and try to change it or prevent it from succeeding</td></tr>
+      <tr><td>minister</td><td>大臣、牧師 n.</td><td>a senior member of the government who is in charge of a government department or a branch of one</td></tr>
+      <tr><td>ancient</td><td>古代の adj.</td><td>very old</td></tr>
+      <tr><td>fountain</td><td>噴水 n.</td><td>a stream of water that is forced up into the air through a small hole, especially for decorative effect</td></tr>
+      <tr><td>justice</td><td>公平 n.</td><td>the fair treatment of people</td></tr>
+      <tr><td>struggle</td><td>奮闘 n.</td><td>to try very hard to do something when it is difficult or when there are a lot of problems</td></tr>
+      <tr><td>resistance</td><td>抵抗 n.</td><td>dislike of or opposition to a plan, an idea, etc.; refusal to obey</td></tr>
+      <tr><td>activist</td><td>活動家 n.</td><td>a person who works to achieve political or social change, especially as a member of an organization with particular aims; a religious leader in certain Christian churches</td></tr>
+      <tr><td>survive</td><td>生き残る v.</td><td>to continue to live or exist</td></tr>
+      <tr><td>protest</td><td>抗議する v.</td><td>to show that you disagree with something by standing somewhere, shouting, carrying signs, etc.</td></tr>
+      <tr><td>ban</td><td>禁止 n.</td><td>an official order that prevents someone doing something or something from happening</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chapter-label" style="margin-top:22px;">
+    <span>Chapter 2.3 · No War is Not Enough</span><hr>
+  </div>
+  <table>
+    <thead><tr><th>单词</th><th>中文</th><th>English Definition</th></tr></thead>
+    <tbody>
+      <tr><td>suffer</td><td>苦しむ v.</td><td>to be badly affected by a disease, pain, sadness, a lack of something</td></tr>
+      <tr><td>prejudice</td><td>偏見 n.</td><td>an unreasonable dislike of or preference for a person, group, custom, etc.</td></tr>
+      <tr><td>poverty</td><td>貧困 n.</td><td>the state of being poor</td></tr>
+      <tr><td>discrimination</td><td>差別 n.</td><td>the practice of treating somebody or a particular group in society less fairly than others</td></tr>
+      <tr><td>bullying</td><td>いじめ n.</td><td>the use of strength or power to frighten or hurt weaker people</td></tr>
+      <tr><td>abolish</td><td>廃止する v.</td><td>to stop or end something by law</td></tr>
+      <tr><td>income</td><td>収入 n.</td><td>all the money that you receive for your work</td></tr>
+      <tr><td>law</td><td>法律 n.</td><td>systems of rules</td></tr>
+      <tr><td>fix</td><td>直す v.</td><td>to repair or adjust something</td></tr>
+      <tr><td>complicated</td><td>複雑な adj.</td><td>made of many different things or parts that are connected; difficult to understand</td></tr>
+      <tr><td>improve</td><td>改善する v.</td><td>to become better than before; to make something / somebody better than before</td></tr>
+      <tr><td>eliminate</td><td>除く v.</td><td>to remove something that is not needed or wanted</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── MATCHING GAME ── -->
+<div id="tab-game" class="section">
+  <div class="game-header">
+    <div class="progress-info">进度：<strong id="prog-done">0</strong> / 26 词</div>
+    <div class="score-info">正确：<strong id="score-val">0</strong> &nbsp;错误：<strong id="wrong-val" style="color:var(--red)">0</strong></div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="prog-bar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div id="round-complete-banner" class="round-complete" style="display:none">
+    <h3>✓ 本轮完成！</h3>
+    <p id="round-msg"></p>
+  </div>
+
+  <div id="all-done-banner" class="complete-banner" style="display:none">
+    <h3>🌿 全部完成！</h3>
+    <p>26 个词全部配对成功，太棒了！</p>
+  </div>
+
+  <div id="game-area">
+    <div class="round-label" id="round-label"></div>
+    <div class="feedback-msg" id="feedback"></div>
+    <div class="columns">
+      <div>
+        <div class="col-title">单词</div>
+        <div id="words-col"></div>
+      </div>
+      <div>
+        <div class="col-title">释义</div>
+        <div id="defs-col"></div>
+      </div>
+    </div>
+    <button class="btn" id="next-btn" onclick="nextRound()" style="display:none">下一轮 →</button>
+    <button class="btn" id="restart-btn" onclick="restartGame()" style="display:none">重新开始</button>
+  </div>
+</div>
+
+<script>
+const ALL_WORDS = [
+  { word: "oppression",     zh: "压制",     def: "a situation in which people are governed in an unfair and cruel way and prevented from having opportunities and freedom" },
+  { word: "indigenous",     zh: "土着の",   def: "belonging to a particular place rather than coming to it from somewhere else" },
+  { word: "soldier",        zh: "兵士",     def: "a member of an army, especially one who is not an officer" },
+  { word: "oppose",         zh: "反対する", def: "to disagree strongly with somebody's plan, policy, etc. and try to change it or prevent it from succeeding" },
+  { word: "minister",       zh: "大臣・牧師",def: "a senior member of the government who is in charge of a government department or a branch of one" },
+  { word: "ancient",        zh: "古代の",   def: "very old" },
+  { word: "fountain",       zh: "噴水",     def: "a stream of water that is forced up into the air through a small hole, especially for decorative effect" },
+  { word: "justice",        zh: "公平",     def: "the fair treatment of people" },
+  { word: "struggle",       zh: "奮闘",     def: "to try very hard to do something when it is difficult or when there are a lot of problems" },
+  { word: "resistance",     zh: "抵抗",     def: "dislike of or opposition to a plan, an idea, etc.; refusal to obey" },
+  { word: "activist",       zh: "活動家",   def: "a person who works to achieve political or social change, especially as a member of an organization with particular aims" },
+  { word: "survive",        zh: "生き残る", def: "to continue to live or exist" },
+  { word: "protest",        zh: "抗議する", def: "to show that you disagree with something by standing somewhere, shouting, carrying signs, etc." },
+  { word: "ban",            zh: "禁止",     def: "an official order that prevents someone doing something or something from happening" },
+  { word: "suffer",         zh: "苦しむ",   def: "to be badly affected by a disease, pain, sadness, a lack of something" },
+  { word: "prejudice",      zh: "偏見",     def: "an unreasonable dislike of or preference for a person, group, custom, etc." },
+  { word: "poverty",        zh: "貧困",     def: "the state of being poor" },
+  { word: "discrimination", zh: "差別",     def: "the practice of treating somebody or a particular group in society less fairly than others" },
+  { word: "bullying",       zh: "いじめ",   def: "the use of strength or power to frighten or hurt weaker people" },
+  { word: "abolish",        zh: "廃止する", def: "to stop or end something by law" },
+  { word: "income",         zh: "収入",     def: "all the money that you receive for your work" },
+  { word: "law",            zh: "法律",     def: "systems of rules" },
+  { word: "fix",            zh: "直す",     def: "to repair or adjust something" },
+  { word: "complicated",    zh: "複雑な",   def: "made of many different things or parts that are connected; difficult to understand" },
+  { word: "improve",        zh: "改善する", def: "to become better than before; to make something / somebody better than before" },
+  { word: "eliminate",      zh: "除く",     def: "to remove something that is not needed or wanted" },
+];
+
+const ROUND_SIZE = 5; // 每轮5对（最后一轮可能少）
+
+let pool = [];        // 还没出现过的词
+let roundWords = [];  // 本轮的词
+let selectedWord = null;
+let selectedDef = null;
+let matched = 0;      // 本轮已配对数
+let totalDone = 0;
+let score = 0;
+let wrong = 0;
+let roundNum = 0;
+let locked = false;
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&name==='list')||(i===1&&name==='game')));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if (name === 'game' && pool.length === 0 && totalDone === 0) startGame();
+}
+
+function startGame() {
+  pool = shuffle([...ALL_WORDS]);
+  totalDone = 0; score = 0; wrong = 0; roundNum = 0;
+  updateStats();
+  startRound();
+}
+
+function restartGame() {
+  document.getElementById('restart-btn').style.display = 'none';
+  document.getElementById('all-done-banner').style.display = 'none';
+  document.getElementById('game-area').style.display = 'block';
+  startGame();
+}
+
+function startRound() {
+  roundNum++;
+  matched = 0;
+  selectedWord = null;
+  selectedDef = null;
+  locked = false;
+
+  roundWords = pool.splice(0, ROUND_SIZE);
+
+  document.getElementById('round-complete-banner').style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('feedback').textContent = '点击左边选单词，再点右边选释义';
+  document.getElementById('round-label').textContent = `第 ${roundNum} 轮 · 本轮 ${roundWords.length} 对`;
+
+  renderRound();
+}
+
+function renderRound() {
+  const wordsCol = document.getElementById('words-col');
+  const defsCol = document.getElementById('defs-col');
+  wordsCol.innerHTML = '';
+  defsCol.innerHTML = '';
+
+  const shuffledWords = shuffle([...roundWords]);
+  const shuffledDefs  = shuffle([...roundWords]);
+
+  shuffledWords.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'word-card';
+    el.dataset.word = item.word;
+    el.innerHTML = `<span>${item.word}</span>`;
+    el.onclick = () => selectWord(el, item.word);
+    wordsCol.appendChild(el);
+  });
+
+  shuffledDefs.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'def-card';
+    el.dataset.word = item.word;
+    el.textContent = item.def;
+    el.onclick = () => selectDef(el, item.word);
+    defsCol.appendChild(el);
+  });
+}
+
+function selectWord(el, word) {
+  if (locked || el.classList.contains('correct')) return;
+  document.querySelectorAll('.word-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedWord = { el, word };
+  tryMatch();
+}
+
+function selectDef(el, word) {
+  if (locked || el.classList.contains('correct')) return;
+  document.querySelectorAll('.def-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedDef = { el, word };
+  tryMatch();
+}
+
+function tryMatch() {
+  if (!selectedWord || !selectedDef) return;
+  locked = true;
+
+  const sw = selectedWord, sd = selectedDef;
+
+  if (sw.word === sd.word) {
+    // Correct
+    score++;
+    sw.el.classList.remove('selected'); sw.el.classList.add('correct');
+    sd.el.classList.remove('selected'); sd.el.classList.add('correct');
+    document.getElementById('feedback').textContent = `✓ 正确！${sw.word}`;
+    matched++;
+    totalDone++;
+    updateStats();
+    selectedWord = null; selectedDef = null;
+    locked = false;
+
+    if (matched === roundWords.length) {
+      setTimeout(showRoundComplete, 400);
+    }
+  } else {
+    // Wrong
+    wrong++;
+    sw.el.classList.add('wrong'); sd.el.classList.add('wrong');
+    document.getElementById('feedback').textContent = `✗ 不对，再试试！`;
+    updateStats();
+    setTimeout(() => {
+      sw.el.classList.remove('wrong','selected');
+      sd.el.classList.remove('wrong','selected');
+      selectedWord = null; selectedDef = null;
+      locked = false;
+    }, 600);
+  }
+}
+
+function showRoundComplete() {
+  if (pool.length === 0) {
+    // All done
+    document.getElementById('all-done-banner').style.display = 'block';
+    document.getElementById('game-area').style.display = 'none';
+    document.getElementById('restart-btn').style.display = 'block';
+    document.getElementById('round-complete-banner').style.display = 'none';
+  } else {
+    const banner = document.getElementById('round-complete-banner');
+    document.getElementById('round-msg').textContent = `还剩 ${pool.length} 个词 · 继续加油！`;
+    banner.style.display = 'block';
+    document.getElementById('next-btn').style.display = 'block';
+  }
+}
+
+function nextRound() {
+  startRound();
+}
+
+function updateStats() {
+  document.getElementById('prog-done').textContent = totalDone;
+  document.getElementById('score-val').textContent = score;
+  document.getElementById('wrong-val').textContent = wrong;
+  document.getElementById('prog-bar').style.width = (totalDone / 26 * 100) + '%';
+}
+</script>
+</body>
+</html>
