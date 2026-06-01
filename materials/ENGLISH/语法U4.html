@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="tag" content="文法">
+<title>语法U4</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --warm-white: #fff9f3;
+    --ink: #2c2416;
+    --ink-light: #5a4f3e;
+    --accent-green: #3d6b4f;
+    --accent-gold: #b8892a;
+    --accent-red: #c0392b;
+    --accent-blue: #2d5f8a;
+    --accent-purple: #6b4f8e;
+    --tag-bg: #eef4f0;
+    --tag-border: #a8c9b5;
+    --rule: #e0d8cc;
+    --note-bg: #fdf5e4;
+    --note-border: #d4a853;
+    --warn-bg: #fef0ee;
+    --warn-border: #e8a89e;
+    --info-bg: #e8f0f8;
+    --info-border: #93b8d8;
+    --highlight: #f5f0e8;
+    --shadow: 0 2px 12px rgba(44,36,22,0.07);
+    --shadow-hover: 0 6px 24px rgba(44,36,22,0.13);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .page-header {
+    background: var(--accent-green);
+    color: #fff;
+    padding: 36px 24px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.04) 20px, rgba(255,255,255,0.04) 40px);
+  }
+  .unit-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 8px;
+  }
+  .page-header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(20px, 5vw, 30px);
+    font-weight: 700;
+    line-height: 1.2;
+    position: relative;
+  }
+  .page-header .subtitle {
+    font-size: 13px;
+    opacity: 0.75;
+    margin-top: 6px;
+    font-style: italic;
+    position: relative;
+  }
+
+  /* SCALE */
+  .scale-card {
+    background: var(--warm-white);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-top: 20px;
+  }
+  .scale-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--accent-green);
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .scale-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 16px;
+    background: var(--accent-green);
+    border-radius: 2px;
+  }
+  .scale-bar { display: flex; flex-direction: column; gap: 6px; }
+  .scale-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .scale-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-gold);
+    font-weight: 500;
+    width: 34px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .scale-fill {
+    flex: 1;
+    min-width: 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    font-size: 12.5px;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: normal;
+    word-break: keep-all;
+  }
+  .lvl-1 { background: #2d5f3f; color: #fff; }
+  .lvl-2 { background: #3d7a54; color: #fff; }
+  .lvl-3 { background: #6aaa80; color: var(--ink); }
+  .lvl-4 { background: #94c9a9; color: var(--ink); }
+  .lvl-5 { background: #c9e8d5; color: var(--ink-light); }
+
+  /* CONTAINER */
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+
+  /* SECTION */
+  .section { margin-top: 28px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .section-num {
+    width: 28px; height: 28px;
+    background: var(--accent-green);
+    color: #fff;
+    border-radius: 50%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-num.gold { background: var(--accent-gold); }
+  .section-num.red { background: var(--accent-red); }
+  .section-num.blue { background: var(--accent-blue); }
+  .section-num.purple { background: var(--accent-purple); }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* CARD */
+  .card {
+    background: var(--warm-white);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 10px;
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: var(--shadow-hover); }
+  .card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-green);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .card-label.gold { color: var(--accent-gold); }
+  .card-label.red { color: var(--accent-red); }
+  .card-label.blue { color: var(--accent-blue); }
+  .card-label.purple { color: var(--accent-purple); }
+  .card p { font-size: 14px; color: var(--ink-light); margin-bottom: 6px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* EXAMPLES */
+  .examples { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+  .ex {
+    background: var(--highlight);
+    border-left: 3px solid var(--rule);
+    border-radius: 0 6px 6px 0;
+    padding: 8px 12px;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+  .ex.correct { border-left-color: var(--accent-green); }
+  .ex.wrong { border-left-color: var(--accent-red); opacity: 0.72; text-decoration: line-through; }
+  .ex .note { font-size: 12px; color: var(--ink-light); display: block; margin-top: 2px; font-style: italic; }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    color: var(--accent-green);
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    text-decoration: none;
+  }
+  .tag.red-tag { background: #fde8e6; border-color: #f1a8a3; color: var(--accent-red); }
+  .tag.blue-tag { background: #e6f0f8; border-color: #93b8d8; color: var(--accent-blue); }
+  .tag.gold-tag { background: #fef5e0; border-color: #e8c96a; color: var(--accent-gold); }
+
+  em.modal { font-style: normal; font-weight: 600; color: var(--accent-green); }
+  em.modal.red { color: var(--accent-red); }
+  em.modal.blue { color: var(--accent-blue); }
+  em.modal.gold { color: var(--accent-gold); }
+  em.modal.purple { color: var(--accent-purple); }
+
+  /* NOTE / WARN / INFO BOXES */
+  .note-box {
+    background: var(--note-bg);
+    border: 1px solid var(--note-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    margin: 10px 0;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .note-box strong { color: var(--accent-gold); }
+  .warn-box {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    margin: 10px 0;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .warn-box strong { color: var(--accent-red); }
+  .info-box {
+    background: var(--info-bg);
+    border: 1px solid var(--info-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    margin: 10px 0;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .info-box strong { color: var(--accent-blue); }
+
+  /* COMPARISON BLOCK — side by side */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  @media (max-width: 460px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare-col {
+    background: var(--warm-white);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 13px;
+  }
+  .compare-col-head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .compare-col-head.green { color: var(--accent-green); }
+  .compare-col-head.purple { color: var(--accent-purple); }
+
+  /* TABLE */
+  .modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 10px;
+    background: var(--warm-white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .modal-table th {
+    background: var(--accent-green);
+    color: #fff;
+    padding: 9px 12px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+  .modal-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .modal-table tr:last-child td { border-bottom: none; }
+  .modal-table tr:nth-child(even) td { background: var(--highlight); }
+
+  /* DETAILS / COLLAPSIBLE */
+  details {
+    background: var(--warm-white);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  summary {
+    padding: 13px 16px;
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    list-style: none;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  summary:hover { background: var(--highlight); }
+  summary::after {
+    content: '▸';
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--accent-green);
+    transition: transform 0.2s;
+  }
+  details[open] summary::after { transform: rotate(90deg); }
+  .details-body { padding: 0 16px 14px; font-size: 13.5px; }
+  .detail-badge {
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    color: var(--accent-green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .detail-badge.red { background: #fde8e6; border-color: #f1a8a3; color: var(--accent-red); }
+  .detail-badge.gold { background: #fef5e0; border-color: #e8c96a; color: var(--accent-gold); }
+  .detail-badge.blue { background: #e6f0f8; border-color: #93b8d8; color: var(--accent-blue); }
+
+  /* MISTAKES */
+  .mistakes-grid { display: grid; gap: 10px; margin-top: 10px; }
+  .mistake-card {
+    background: var(--warm-white);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .mistake-rule {
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule);
+    background: var(--highlight);
+  }
+  .mistake-examples { padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+
+  /* DIVIDER */
+  hr.divider { border: none; border-top: 1px solid var(--rule); margin: 22px 0; }
+
+  /* FOOTER */
+  .page-footer {
+    text-align: center;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-light);
+    opacity: 0.5;
+    letter-spacing: 0.08em;
+  }
+
+  /* FORMULA BOX */
+  .formula-box {
+    background: var(--highlight);
+    border: 1px dashed var(--rule);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent-blue);
+    margin: 8px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="unit-label">文法 · 语法U4</div>
+  <h1>语法U4</h1>
+  <div class="subtitle">Modals to Express Degrees of Necessity — 必要程度情态动词全解</div>
+</div>
+
+<div class="container">
+
+  <!-- SCALE -->
+  <div class="scale-card" style="margin-top:20px;">
+    <div class="scale-title">必要程度强弱一览（Necessity Scale）</div>
+    <div class="scale-bar">
+      <div class="scale-row"><span class="scale-pct">100%</span><div class="scale-fill lvl-1">must · have to · have got to（强制义务）</div></div>
+      <div class="scale-row"><span class="scale-pct">↑</span><div class="scale-fill lvl-2">had better · should · ought to（建议 / 警告）</div></div>
+      <div class="scale-row"><span class="scale-pct">—</span><div class="scale-fill lvl-3">be supposed to · be to（期望 / 预期）</div></div>
+      <div class="scale-row"><span class="scale-pct">↓</span><div class="scale-fill lvl-4">could · might（温和建议）</div></div>
+      <div class="scale-row"><span class="scale-pct">0%</span><div class="scale-fill lvl-5">don't have to · didn't have to（无必要）</div></div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: Definition + Simple vs Perfect -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>情态动词基础（Definition of Modals）</h2>
+    </div>
+    <div class="card">
+      <div class="card-label">什么是情态动词</div>
+      <p>情态动词（Modals）是辅助动词，表达说话者对所描述行为的<strong>态度</strong>，包括：<strong>义务 obligation</strong>、<strong>建议 advice</strong>、<strong>预期 expectation</strong>、<strong>建议 suggestion</strong>。</p>
+      <p>包括：<em class="modal">can, could, shall, should, will, would, may, might, must, had better</em>。每个情态动词对所有人称形式<strong>相同</strong>（无需变位）。</p>
+    </div>
+
+    <!-- Simple vs Perfect — detailed -->
+    <div class="card" style="border-color: var(--accent-green); border-width: 1.5px;">
+      <div class="card-label">Simple Modal vs Perfect Modal — 核心区别</div>
+      <div class="formula-box">Simple modal：情态 + 原形（base form）</div>
+      <div class="formula-box">Perfect modal：情态 + have + 过去分词（past participle）</div>
+
+      <p style="margin-top:12px; font-size:14px;">两者的差异<strong>不只是时态</strong>，还有一个关键含义层：</p>
+
+      <div class="compare-grid" style="margin-top:10px;">
+        <div class="compare-col">
+          <div class="compare-col-head green">Simple Modal → 现在 / 将来</div>
+          <p style="font-size:13px; margin-bottom:6px;">动作<strong>尚未发生</strong>，是对当前或未来的建议 / 义务。</p>
+          <div class="ex correct">We <em class="modal">should invite</em> Jim tonight.
+            <span class="note">→ 还没邀请，这是个建议</span>
+          </div>
+          <div class="ex correct">You <em class="modal red">must leave</em> now.
+            <span class="note">→ 现在必须离开</span>
+          </div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-head purple">Perfect Modal → 过去（+ 反事实）</div>
+          <p style="font-size:13px; margin-bottom:6px;">动作<strong>发生在过去</strong>，且往往暗示结果与现实<strong>相反</strong>。</p>
+          <div class="ex correct">We <em class="modal purple">should have invited</em> Jim.
+            <span class="note">→ 过去没有邀请，现在后悔/批评</span>
+          </div>
+          <div class="ex correct">You <em class="modal red">must have left</em> early.
+            <span class="note">→ 对过去情况的推测（非义务用法）</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:12px;">
+        <strong>💡 反事实（Counterfactual）含义：</strong><br>
+        在 <em>should / ought to / could / might</em> 等表示建议或可能的情态动词中，<strong>Perfect modal 通常暗示该行为<em>没有</em>发生</strong>：<br>
+        <br>
+        • <em class="modal blue">should have done</em> → 本该做，但<strong>没做</strong>（遗憾 / 批评）<br>
+        • <em class="modal blue">ought not to have done</em> → 本不该做，但<strong>做了</strong>（批评）<br>
+        • <em class="modal blue">could have done</em> → 本可以做，但<strong>没做</strong>（建议 / 遗憾）<br>
+        <br>
+        这就是课本在括号里写 <em>(but you didn't)</em> 或 <em>(but you did)</em> 的原因。
+      </div>
+
+      <div class="warn-box">
+        <strong>⚠ 特殊情况：</strong>表达<strong>过去义务</strong>不用 Perfect modal，要用 <em class="modal red">had to</em>。<br>
+        • <em class="modal red">must have left</em> 在义务语境中是错误的——这个结构在英语里只表示<strong>对过去的推测</strong>（他一定已经离开了）。<br>
+        • 正确表达过去义务：We <em class="modal red">had to leave</em> early.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Modal-like -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num gold">2</div>
+      <h2>类情态表达（Modal-like Expressions）</h2>
+    </div>
+    <div class="card">
+      <div class="card-label gold">为什么需要"类情态"</div>
+      <p>真正的情态动词（must, should…）形式固定，不能直接变时态。类情态表达弥补了这个缺口，尤其在需要<strong>过去式或将来式</strong>时更灵活。</p>
+    </div>
+    <table class="modal-table">
+      <tr><th>表达</th><th>近义</th><th>说明</th><th>例句</th></tr>
+      <tr>
+        <td><em class="modal gold">have to</em></td>
+        <td>≈ must</td>
+        <td>可用于所有时态，最通用</td>
+        <td>We <em class="modal gold">had to leave</em> early.（过去）<br>We <em class="modal gold">will have to</em> invite them.（将来）</td>
+      </tr>
+      <tr>
+        <td><em class="modal gold">have got to</em></td>
+        <td>≈ must</td>
+        <td>口语/非正式；否定少用</td>
+        <td>We've <em class="modal gold">got to leave</em> now.</td>
+      </tr>
+      <tr>
+        <td><em class="modal gold">ought to</em></td>
+        <td>≈ should</td>
+        <td>正式；疑问/否定少用</td>
+        <td>You <em class="modal gold">ought to take</em> a gift.</td>
+      </tr>
+      <tr>
+        <td><em class="modal gold">be supposed to</em></td>
+        <td>≈ should</td>
+        <td>表"按规定/习俗应该"；可用于过去</td>
+        <td>You're <em class="modal gold">supposed to</em> take off your shoes.</td>
+      </tr>
+      <tr>
+        <td><em class="modal gold">be allowed to</em></td>
+        <td>≈ may / can</td>
+        <td>表许可，强调被允许</td>
+        <td>Children <em class="modal gold">are allowed to</em> play here.</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- SECTION 3: Strong Necessity -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num red">3</div>
+      <h2>强烈必要（Strong Necessity）</h2>
+    </div>
+
+    <details open>
+      <summary><span class="detail-badge red">正式 / 书面</span>must — 语气最强，不可逃避</summary>
+      <div class="details-body">
+        <p style="margin-bottom:8px;">表达<strong>极强的内在义务</strong>或规则，常见于书面、公告、说话者认为非常重要的场合。</p>
+        <div class="warn-box"><strong>⚠ 过去式陷阱：</strong><em class="modal red">must</em> 没有过去式形式，不能用 <em class="modal red">must have + 过去分词</em> 表义务（那是推测）。过去义务一律用 <em class="modal red">had to</em>。</div>
+        <div class="examples">
+          <div class="ex correct">You <em class="modal red">must eat</em> everything they offer you. <span class="tag red-tag">强制，现在</span></div>
+          <div class="ex correct">We <em class="modal red">had to leave</em> early last night. <span class="tag red-tag">强制，过去</span></div>
+          <div class="ex wrong">We <em class="modal red">must have left</em> early. <span class="tag red-tag">✗ 这是"推测"，不是义务</span></div>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="detail-badge">通用</span>have to — 最灵活，适用所有时态</summary>
+      <div class="details-body">
+        <p style="margin-bottom:8px;">含义与 must 相近，但来自外部规则或实际情况，而非说话者的强烈个人态度。可用于所有时态。</p>
+        <div class="examples">
+          <div class="ex correct">We <em class="modal red">have to</em> arrive on time. <span class="tag">现在 / 习惯</span></div>
+          <div class="ex correct">We <em class="modal red">will have to</em> invite them over. <span class="tag">将来必要</span></div>
+          <div class="ex correct">We <em class="modal red">had to</em> leave the restaurant. <span class="tag">过去必要</span></div>
+        </div>
+        <div class="note-box"><strong>💡 must vs have to 语感差异：</strong><br>
+          • <em class="modal red">must</em>：说话者自己认为必须（内在驱动，主观）<br>
+          • <em class="modal red">have to</em>：外部情况或规则要求（客观）<br>
+          例：I <em class="modal red">must</em> study more.（我觉得我必须）vs. I <em class="modal red">have to</em> study — it's required.（课程要求）
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="detail-badge gold">口语</span>have got to — 非正式对话</summary>
+      <div class="details-body">
+        <p style="margin-bottom:8px;">只用于<strong>现在或将来</strong>，否定形式少用（用 don't have to 代替）。</p>
+        <div class="examples">
+          <div class="ex correct">We've <em class="modal red">got to</em> leave now.</div>
+          <div class="ex wrong">We <em class="modal red">haven't got to</em> leave yet. <span class="tag red-tag">✗ 少用此形式</span></div>
+          <div class="ex correct">We <em class="modal">don't have to</em> leave yet. <span class="tag">✓ 正确否定</span></div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- SECTION 4: Prohibition vs No Necessity -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num red">4</div>
+      <h2>禁止 vs 无必要（Prohibition vs No Necessity）</h2>
+    </div>
+    <div class="warn-box"><strong>⚠ 最重要的混淆点：</strong>虽然 <em class="modal red">must</em> 和 <em class="modal">have to</em> 在肯定句含义相近，但否定形式<strong>含义完全不同</strong>！</div>
+    <table class="modal-table">
+      <tr><th>表达</th><th>含义</th><th>例句</th></tr>
+      <tr>
+        <td><em class="modal red">must not</em> + 原形<br><small style="color:var(--ink-light)">= mustn't</small></td>
+        <td><strong>禁止</strong><br><small>（It is prohibited）</small></td>
+        <td>You <em class="modal red">must not smoke</em> here.<br><small style="color:var(--ink-light)">吸烟是被禁止的</small></td>
+      </tr>
+      <tr>
+        <td><em class="modal">don't / doesn't have to</em> + 原形</td>
+        <td><strong>不必要</strong>（可以做，但不强制）<br><small>（Not necessary）</small></td>
+        <td>You <em class="modal">don't have to eat</em> all the food.<br><small style="color:var(--ink-light)">不强制你吃完，吃多少随你</small></td>
+      </tr>
+      <tr>
+        <td><em class="modal">didn't have to</em> + 原形</td>
+        <td>过去不必要<br><small>（Was not necessary）</small></td>
+        <td>You <em class="modal">didn't have to bring</em> a gift.<br><small style="color:var(--ink-light)">带礼物是不必要的（但你带了也没错）</small></td>
+      </tr>
+    </table>
+    <div class="note-box" style="margin-top:10px;">
+      <strong>💡 直观理解：</strong><br>
+      <em class="modal red">mustn't</em> = "绝对不可以做"（禁令）<br>
+      <em class="modal">don't have to</em> = "不是必须的"（自由选择）<br><br>
+      对比：A: Is it OK if we miss the flight?<br>
+      B: No! We <em class="modal red">mustn't miss</em> the flight. ✓（不能错过！）<br>
+      <span style="text-decoration:line-through; opacity:0.7">We <em class="modal">don't have to</em> miss the flight.</span> ✗（这说的是：错过不是必须的——意思完全不同）
+    </div>
+  </div>
+
+  <!-- SECTION 5: Advice -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num blue">5</div>
+      <h2>建议（Advice）</h2>
+    </div>
+    <div class="card">
+      <div class="card-label blue">should / ought to</div>
+      <p>两者都表示"这是个好主意"或"正确的做法"，含义接近，但用法有细微差别。</p>
+    </div>
+
+    <details open>
+      <summary><span class="detail-badge blue">最常用</span>should — 建议的主力情态动词</summary>
+      <div class="details-body">
+        <p style="margin-bottom:8px;">用于所有场合，包括疑问句和否定句。</p>
+        <div class="examples">
+          <div class="ex correct">You <em class="modal blue">should decline</em> gently. <span class="note">→ 现在建议</span></div>
+          <div class="ex correct">You <em class="modal blue">should have done</em> that the first time. <span class="tag blue-tag">过去 — 但你没做</span><span class="note">→ 批评或遗憾，动作没有发生</span></div>
+          <div class="ex correct">You <em class="modal blue">shouldn't have mentioned</em> the price. <span class="tag blue-tag">过去 — 但你做了</span><span class="note">→ 批评，动作已经发生了</span></div>
+          <div class="ex correct">A: <em class="modal blue">Should</em> we offer to help? B: No, you <em class="modal blue">shouldn't</em>. <span class="note">→ 疑问和否定用 should</span></div>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="detail-badge">正式</span>ought to — 与 should 含义相同，但更正式</summary>
+      <div class="details-body">
+        <p style="margin-bottom:8px;">疑问句和否定句中通常用 should 替代，不用 ought to。</p>
+        <div class="examples">
+          <div class="ex correct">We <em class="modal blue">ought to give</em> them flowers. <span class="note">→ 现在建议</span></div>
+          <div class="ex correct">You <em class="modal blue">ought to have done</em> that first. <span class="note">→ 过去本该做，但没做</span></div>
+          <div class="ex correct">You <em class="modal blue">ought not to have mentioned</em> your gift. <span class="note">→ 过去本不该做，但做了</span></div>
+        </div>
+        <div class="warn-box"><strong>⚠ 注意：</strong>ought 后面必须跟 to，不可省略！<br>
+          ✓ You <em class="modal blue">ought to give</em> her a call. &nbsp;&nbsp; ✗ You <del>ought give</del> her a call.
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="detail-badge gold">征求建议</span>shall — 疑问句中征求意见</summary>
+      <div class="details-body">
+        <p style="margin-bottom:8px;">只用 I / we 做主语，用于问"我们是否该…"，不用于陈述句表义务。后面常接 let's + 原形作回应。</p>
+        <div class="examples">
+          <div class="ex correct">A: <em class="modal gold">Shall we</em> get them some flowers? B: Yes, <em class="modal gold">let's do</em> that.</div>
+          <div class="ex correct"><em class="modal gold">Shall I</em> call the waiter?</div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- SECTION 6: Warnings -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num red">6</div>
+      <h2>警告（Warnings — had better）</h2>
+    </div>
+    <div class="card">
+      <div class="card-label red">had better — 比 should 语气更强</div>
+      <p>暗示<strong>如果不遵从，会有不好的后果</strong>。语气介于"建议"和"警告"之间。</p>
+      <p>缩略形式：<em class="modal red">I'd / you'd / we'd better</em>。疑问句通常用<strong>否定形式 hadn't better</strong>。</p>
+      <div class="note-box"><strong>💡 had better vs should 对比：</strong><br>
+        • You <em class="modal blue">should</em> leave early. → 温和建议，你可以考虑<br>
+        • You <em class="modal red">had better</em> leave early. → 警告，不走的话你可能会后悔<br><br>
+        <em class="modal red">Had better</em> 不能用于 perfect modal（不存在 "had better have done" 的用法）。
+      </div>
+      <div class="examples">
+        <div class="ex correct">We'd <em class="modal red">better go</em>, or we'll be late for work.</div>
+        <div class="ex correct"><em class="modal red">Hadn't you better avoid</em> talking about politics during dinner? <span class="note">→ 疑问句用否定形式</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: Expectations -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num gold">7</div>
+      <h2>预期（Expectations）</h2>
+    </div>
+    <div class="card">
+      <div class="card-label gold">be supposed to — 最核心的预期表达</div>
+      <p>表示"按照规定 / 习俗 / 约定应该…"，强调<strong>外部的期待或规则</strong>，而非说话者的个人建议。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label gold">be supposed to 的时态与反事实含义</div>
+      <p>这是 <em>be supposed to</em> 最容易搞错的地方——过去式有特殊含义：</p>
+      <div class="compare-grid">
+        <div class="compare-col">
+          <div class="compare-col-head green">现在式</div>
+          <div class="ex correct">You're <em class="modal gold">supposed to take off</em> your shoes.
+            <span class="note">→ 规定如此（中性陈述）</span>
+          </div>
+          <div class="ex correct">All employees <em class="modal gold">are to attend</em> the party.
+            <span class="note">→ be to，正式英语的强烈预期</span>
+          </div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-head purple">过去式（含反事实）</div>
+          <div class="ex correct">We <em class="modal gold">were supposed to take</em> flowers.
+            <span class="note">→ 应该带花，但<strong>没带</strong></span>
+          </div>
+          <div class="ex correct">We <em class="modal gold">weren't supposed to mention</em> the gift.
+            <span class="note">→ 不应该提，但<strong>提了</strong></span>
+          </div>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:10px;"><strong>💡 规律：</strong>过去肯定式 → 暗示动作<strong>没发生</strong>；过去否定式 → 暗示动作<strong>发生了</strong>。和 perfect modal 的逻辑相同。</div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: Suggestions -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>温和建议（Suggestions — could / might）</h2>
+    </div>
+    <div class="card">
+      <div class="card-label">语气最轻的建议方式</div>
+      <p><em class="modal">could</em> 和 <em class="modal">might</em> 都能表示礼貌、非强制性的建议。<em class="modal">could</em> 在这个用法中比 <em class="modal">might</em> 更常见。</p>
+      <p>与表示"能力"或"可能性"的 could / might 不同，这里纯粹是<strong>提供选择</strong>，不强求。</p>
+
+      <div class="compare-grid" style="margin-top:10px;">
+        <div class="compare-col">
+          <div class="compare-col-head green">Simple（现在/将来建议）</div>
+          <div class="ex correct">You <em class="modal">could take</em> them some chocolates.</div>
+          <div class="ex correct">You <em class="modal">might send</em> a thank-you note.</div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-head purple">Perfect（过去建议，动作未发生）</div>
+          <div class="ex correct">You <em class="modal">could have taken</em> them flowers.
+            <span class="note">→ 可以带，但没带</span>
+          </div>
+          <div class="ex correct">You <em class="modal">might have offered</em> to help.
+            <span class="note">→ 可以提出，但没提出</span>
+          </div>
+        </div>
+      </div>
+      <div class="note-box" style="margin-top:10px;"><strong>💡 注意：</strong>could have / might have 在此是"过去温和建议（动作未发生）"，不是表猜测。区别在于语境：如果是对事实的推测，才是猜测用法（e.g. "He could have left already."）</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- COMMON MISTAKES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num red">⚠</div>
+      <h2>常见错误（Common Mistakes）</h2>
+    </div>
+    <div class="mistakes-grid">
+      <div class="mistake-card">
+        <div class="mistake-rule">❶ 混淆 <em class="modal red">must not</em>（禁止）和 <em class="modal">don't have to</em>（不必要）</div>
+        <div class="mistake-examples">
+          <div class="ex correct">We <em class="modal red">mustn't forget</em> our passports. → 禁止忘记</div>
+          <div class="ex wrong">We <em class="modal">don't have to</em> forget our passports. → 意思变成"不必须忘记"（荒谬）</div>
+        </div>
+      </div>
+      <div class="mistake-card">
+        <div class="mistake-rule">❷ Perfect modal 中用 <em class="modal red">had</em> 而非 <em class="modal">have</em>（modal + <em class="modal">have</em> + 过去分词）</div>
+        <div class="mistake-examples">
+          <div class="ex correct">You <em class="modal">should have let</em> me know you couldn't come.</div>
+          <div class="ex wrong">You should <em class="modal red">had</em> let me know you couldn't come.</div>
+        </div>
+      </div>
+      <div class="mistake-card">
+        <div class="mistake-rule">❸ <em class="modal">ought</em> 后面不能省略 <em class="modal">to</em></div>
+        <div class="mistake-examples">
+          <div class="ex correct">You <em class="modal">ought to give</em> her a call soon.</div>
+          <div class="ex wrong">You <em class="modal red">ought give</em> her a call soon.</div>
+        </div>
+      </div>
+      <div class="mistake-card">
+        <div class="mistake-rule">❹ 过去义务不能用 <em class="modal red">must have</em>，要用 <em class="modal">had to</em></div>
+        <div class="mistake-examples">
+          <div class="ex correct">We <em class="modal">had to leave</em> the party early. → 过去必须离开</div>
+          <div class="ex wrong">We <em class="modal red">must have left</em> the party early. → 意思变成"我们一定是早离开了"（推测）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- QUICK REF -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">≡</div>
+      <h2>快速对照总表</h2>
+    </div>
+    <table class="modal-table">
+      <tr><th>类别</th><th>现在 / 将来</th><th>过去形式</th></tr>
+      <tr><td>强制义务</td><td><em class="modal red">must / have to / have got to</em></td><td><em class="modal red">had to</em>（不用 must have）</td></tr>
+      <tr><td>禁止</td><td><em class="modal red">must not / can't / not allowed to</em></td><td><em class="modal red">weren't allowed to</em></td></tr>
+      <tr><td>无必要</td><td><em class="modal">don't have to</em></td><td><em class="modal">didn't have to</em></td></tr>
+      <tr><td>建议</td><td><em class="modal blue">should / ought to</em></td><td><em class="modal blue">should have / ought to have</em>（但没做）</td></tr>
+      <tr><td>警告</td><td><em class="modal red">had better</em></td><td>— （无 perfect 形式）</td></tr>
+      <tr><td>预期</td><td><em class="modal gold">be supposed to / be to</em></td><td><em class="modal gold">were supposed to</em>（暗示没做）</td></tr>
+      <tr><td>温和建议</td><td><em class="modal">could / might</em></td><td><em class="modal">could have / might have</em>（暗示没做）</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<div class="page-footer">语法U4 · 文法 · Modals to Express Degrees of Necessity</div>
+
+</body>
+</html>
